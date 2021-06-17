@@ -1,0 +1,12 @@
+columnNotPresent=%1$s@------: Column %2$s is required but not present
+fileProblem=The file could not be opened to be processed. This can be because the file is not a valid excel file.
+sheetProblem=%1$s@------: There was a problem reading this sheet
+sheetNotPresent=%1$s@------: This sheet is not present
+rowProblem=%1$s@%2$s: There was a problem processing this row
+valueFormatProblem=%1$s@%2$s: Value %3$s in column %4$s(#%5$s) does not respect the expected format
+valueFormatRegexProblem=%1$s@%2$s: Value %3$s in column %4$s(#%5$s) does not respect the expected regex format: %6$s
+valueFormulaNotAllowedProblem=%1$s@%2$s: Formula %5$s is not allowed in column %3$s(#%4$s)
+valueFormatEnumProblem=%1$s@%2$s: Value %3$s in column %4$s(#%5$s) must have one of the following values: %6$s
+valueNullProblem=%1$s@%2$s: Column %3$s(#%4$s) cannot be null
+valueProblem=%1$s@%2$s: There was a problem processing column: %3$s(#%4$s)
+valueRangeProblem=%1$s@%2$s: The value %3$s in column %4$s(#%5$s) exceeds the expected range

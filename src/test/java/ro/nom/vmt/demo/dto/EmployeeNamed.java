@@ -1,0 +1,282 @@
+package ro.nom.vmt.demo.dto;
+
+/*
+ *@Author Mihai Vasile (2021)
+ *
+ * This file is part of the Spreadsheet Importer project
+ * This file as well as the project have an MIT license
+ */
+
+import ro.nom.vmt.demo.*;
+import ro.nom.vmt.spreadsheet_importer.annotation.Import;
+import ro.nom.vmt.spreadsheet_importer.annotation.Importable;
+import ro.nom.vmt.spreadsheet_importer.annotation.Inject;
+import ro.nom.vmt.spreadsheet_importer.annotation.Named;
+import ro.nom.vmt.spreadsheet_importer.interfaces.Problem;
+import ro.nom.vmt.spreadsheet_importer.interfaces.Validatable;
+import ro.nom.vmt.spreadsheet_importer.problems.RowProblem;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import static ro.nom.vmt.data.FileData.EMAIL_REGEX;
+import static ro.nom.vmt.spreadsheet_importer.annotation.Inject.InjectType.*;
+
+@Importable(isNamed = true, sheetNames = {"London.*"})
+public class EmployeeNamed implements Validatable {
+
+    @Named(value = "Bonus.*", maximumMatches = Integer.MAX_VALUE)
+    @Import
+    List<String> bonuses;
+    @Named(value = "Bonus.*", maximumMatches = Integer.MAX_VALUE)
+    @Import
+    Map<String, String> bonusesMap1;
+    @Named(value = "Bonus.*", maximumMatches = Integer.MAX_VALUE)
+    @Import
+    Map<Integer, String> bonusesMap2;
+    @Named(value = "Last login")
+    @Import
+    LocalDateTime lastLogin;
+    @Named("Hired on")
+    @Import
+    LocalDate hiredOn;
+    @Named("Starts work at")
+    @Import
+    LocalTime startsWorkAt;
+    @Named("Password expires")
+    @Import(matches = "yy-MM-dd_HH:mm")
+    LocalDateTime passwordExpires;
+    @Inject(UNMATCHED_COLUMNS)
+    Map<String, String> unmatchedColumns;
+    Set<Class<? extends Problem>> expectedValidationProblems;
+    @Inject(SHEET_INDEX)
+    private Integer sheetIndex;
+    @Inject(SHEET_NAME)
+    private String sheetName;
+    @Inject(ROW_NUMBER)
+    private Integer rowNumber;
+    @Inject(IMPORT_INDEX)
+    private Long importIndex;
+    @Named("First Name")
+    @Import
+    private String firstName;
+    @Named("Last Name")
+    @Import(matches = "[a-zA-Z]+", preProcess = ToUpperCaseProcessor.class)
+    private String lastName;
+    @Named(value = "Gender")
+    @Import(preProcess = EnumProcessor.class)
+    private GenderEnum gender;
+    @Named("Age")
+    @Import
+    private Byte age;
+    @Named("Email")
+    @Import(required = true, matches = EMAIL_REGEX)
+    private Email email;
+    @Named("Phone")
+    @Import
+    private String phone;
+    @Named("Salary")
+    @Import(formulaAllowed = false)
+    private Integer salary;
+    @Named("Married")
+    @Import
+    private Boolean isMarried;
+    @Named(value = "Non existent column", minimumMatches = 0)
+    @Import
+    private Boolean nonExistentColumn;
+
+    @Override
+    public List<RowProblem> validate(String sheetName, Integer rowNumber) {
+        List<RowProblem> problemList = new ArrayList<>();
+        if (salary != null && salary < 0) {
+            problemList.add(new BusinessProblem(sheetName, rowNumber));
+        }
+        return problemList;
+    }
+
+    public String getSheetName() {
+        return sheetName;
+    }
+
+    public void setSheetName(String sheetName) {
+        this.sheetName = sheetName;
+    }
+
+    public Integer getRowNumber() {
+        return rowNumber;
+    }
+
+    public void setRowNumber(Integer rowNumber) {
+        this.rowNumber = rowNumber;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public GenderEnum getGender() {
+        return gender;
+    }
+
+    public void setGender(GenderEnum gender) {
+        this.gender = gender;
+    }
+
+    public Byte getAge() {
+        return age;
+    }
+
+    public void setAge(Byte age) {
+        this.age = age;
+    }
+
+    public Email getEmail() {
+        return email;
+    }
+
+    public void setEmail(Email email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Integer getSalary() {
+        return salary;
+    }
+
+    public void setSalary(Integer salary) {
+        this.salary = salary;
+    }
+
+    public Boolean getIsMarried() {
+        return isMarried;
+    }
+
+    public void setIsMarried(Boolean married) {
+        isMarried = married;
+    }
+
+
+    public Boolean getNonExistentColumn() {
+        return nonExistentColumn;
+    }
+
+    public void setNonExistentColumn(Boolean nonExistentColumn) {
+        this.nonExistentColumn = nonExistentColumn;
+    }
+
+    public List<String> getBonuses() {
+        return bonuses;
+    }
+
+    public void setBonuses(List<String> bonuses) {
+        this.bonuses = bonuses;
+    }
+
+
+    public Long getImportIndex() {
+        return importIndex;
+    }
+
+    public void setImportIndex(Long importIndex) {
+        this.importIndex = importIndex;
+    }
+
+
+    public Map<String, String> getBonusesMap1() {
+        return bonusesMap1;
+    }
+
+    public void setBonusesMap1(Map<String, String> bonusesMap1) {
+        this.bonusesMap1 = bonusesMap1;
+    }
+
+    public Map<Integer, String> getBonusesMap2() {
+        return bonusesMap2;
+    }
+
+    public void setBonusesMap2(Map<Integer, String> bonusesMap2) {
+        this.bonusesMap2 = bonusesMap2;
+    }
+
+    public Map<String, String> getUnmatchedColumns() {
+        return unmatchedColumns;
+    }
+
+    public void setUnmatchedColumns(Map<String, String> unmatchedColumns) {
+        this.unmatchedColumns = unmatchedColumns;
+    }
+
+    public Set<Class<? extends Problem>> getExpectedValidationProblems() {
+        return expectedValidationProblems;
+    }
+
+    public void setExpectedValidationProblems(Set<Class<? extends Problem>> expectedValidationProblems) {
+        this.expectedValidationProblems = expectedValidationProblems;
+    }
+
+    public LocalDateTime getLastLogin() {
+        return lastLogin;
+    }
+
+    public void setLastLogin(LocalDateTime lastLogin) {
+        this.lastLogin = lastLogin;
+    }
+
+    public LocalDate getHiredOn() {
+        return hiredOn;
+    }
+
+    public void setHiredOn(LocalDate hiredOn) {
+        this.hiredOn = hiredOn;
+    }
+
+    public LocalTime getStartsWorkAt() {
+        return startsWorkAt;
+    }
+
+    public void setStartsWorkAt(LocalTime startsWorkAt) {
+        this.startsWorkAt = startsWorkAt;
+    }
+
+    public LocalDateTime getPasswordExpires() {
+        return passwordExpires;
+    }
+
+    public void setPasswordExpires(LocalDateTime passwordExpires) {
+        this.passwordExpires = passwordExpires;
+    }
+
+    public Integer getSheetIndex() {
+        return sheetIndex;
+    }
+
+    public void setSheetIndex(Integer sheetIndex) {
+        this.sheetIndex = sheetIndex;
+    }
+
+
+}
