@@ -65,7 +65,14 @@ Features
 
 Instalation
 ===========
-**Maven** dependency **coming soon**
+From **Maven central**:
+```
+    <dependency>
+        <groupId>ro.nom.vmt</groupId>
+        <artifactId>spreadsheet-importer</artifactId>
+        <version>0.1.0</version>
+    </dependency>    
+```
 
 How to use
 ===========
